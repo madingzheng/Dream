@@ -1,15 +1,23 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import Button from './Button'
-
+import { useSingleton } from './hooks/hooks'
+import { StoreState } from './redux/interface'
 const App: React.FC = () => {
-  const [count, setCount] = useState(0)
   const [count2, setCount2] = useState(1)
   const ref = useRef<HTMLInputElement>(null)
+  const count = useSelector((state: StoreState) => state.value)
 
-  const handleIncrement = useCallback(() => {
-    setCount(count + 1)
-  }, [count])
-
+  const dispatch = useDispatch()
+  const handleIncrement = () => {
+    dispatch({ type: 'counter/incremented' })
+  }
+  useSingleton(() => {
+    console.log('执行一次')
+  })
+  useEffect(() => {
+    console.log('render')
+  }, [])
   return (
     <div>
       {count}
